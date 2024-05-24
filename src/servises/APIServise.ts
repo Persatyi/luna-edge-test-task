@@ -26,6 +26,21 @@ class APIServise {
     });
   }
 
+  getQuizById(id: number) {
+    return new Promise<IQuiz | undefined>((resolve, reject) => {
+      setTimeout(() => {
+        const quizList: IQuiz[] = get(QUIZZES);
+        const quiz: IQuiz | undefined = quizList.find((quiz) => quiz.id === id);
+
+        if (quiz === undefined) {
+          reject(new Error("Quiz not found"));
+        }
+
+        resolve(quiz);
+      }, 1000);
+    });
+  }
+
   removeQuiz(quizId: number) {
     return new Promise<IQuiz[]>((resolve, reject) => {
       setTimeout(() => {

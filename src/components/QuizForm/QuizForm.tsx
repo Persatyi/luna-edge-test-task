@@ -8,7 +8,7 @@ interface IAnswerOption {
   isCorrect: boolean;
 }
 
-interface IQuestion {
+export interface IQuestion {
   id: number;
   text: string;
   answers: IAnswerOption[];

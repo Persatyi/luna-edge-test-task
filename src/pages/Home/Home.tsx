@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import { IQuiz } from "../../components/QuizForm/QuizForm";
+import Button from "../../components/Button/Button";
 
 import API from "../../servises/APIServise";
 
@@ -29,6 +30,7 @@ const Home: React.FC = () => {
           <p>{name}</p>
           <p>Amount of questions</p>
           <p>{questions.length}</p>
+          <Button type="link" text="Open" to={`take-quiz/${id}`} />
         </li>
       ))}
     </ul>

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import APIServise from "../../servises/APIServise";
+
 interface IAnswerOption {
   id: number;
   text: string;
@@ -12,7 +14,7 @@ interface IQuestion {
   answers: IAnswerOption[];
 }
 
-interface IQuiz {
+export interface IQuiz {
   id: number;
   name: string;
   questions: IQuestion[];
@@ -117,7 +119,7 @@ const QuizForm: React.FC = () => {
   const handleSubmitForm = () => {
     setQuizName("");
     setQuestions([]);
-    console.log({
+    APIServise.addQuiz({
       name: quizName,
       id: Date.now(),
       questions,
@@ -195,12 +197,14 @@ const QuizForm: React.FC = () => {
       >
         Add Question
       </button>
-      <button
-        onClick={handleSubmitForm}
-        className="bg-green-500 text-white px-4 py-2 rounded"
-      >
-        Create Quiz
-      </button>
+      {quizName !== "" && questions.length !== 0 && (
+        <button
+          onClick={handleSubmitForm}
+          className="bg-green-500 text-white px-4 py-2 rounded"
+        >
+          Create Quiz
+        </button>
+      )}
     </>
   );
 };

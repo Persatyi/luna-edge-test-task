@@ -22,4 +22,6 @@ const remove = (key: string) => {
   }
 };
 
-export { get, save, remove };
+const QUIZZES = "quizzes";
+
+export { get, save, remove, QUIZZES };

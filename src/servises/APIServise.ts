@@ -45,8 +45,8 @@ class APIServise {
     return new Promise<IQuiz[]>((resolve, reject) => {
       setTimeout(() => {
         const quizzes = get(QUIZZES);
-        quizzes.filter((quiz: IQuiz) => quiz.id !== quizId);
-        save(QUIZZES, quizzes);
+        const quiz = quizzes.filter((quiz: IQuiz) => quiz.id !== quizId);
+        save(QUIZZES, quiz);
         resolve(get(QUIZZES));
       }, 1000);
     });

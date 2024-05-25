@@ -1,22 +1,34 @@
 import React, { useState, useEffect } from "react";
 
 import { IQuiz } from "../../components/QuizForm/QuizForm";
-import Button from "../../components/Button/Button";
+import Button from "../../components/Button";
 
 import API from "../../servises/APIServise";
 
 const Home: React.FC = () => {
   const [quizList, setQuizList] = useState<IQuiz[]>([]);
 
-  const getAllQuizzes = () => {
-    API.getAllQuizzes().then((response) => {
-      setQuizList(response);
-    });
-  };
-
   useState(() => {
+    const getAllQuizzes = async () => {
+      try {
+        const response = await API.getAllQuizzes();
+        setQuizList(response);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     getAllQuizzes();
   });
+
+  const removeQuizHandler = async (id: number) => {
+    try {
+      const response = await API.removeQuiz(id);
+      setQuizList(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   if (quizList.length === 0) {
     return <p>Here is no quizzes yet.</p>;
@@ -31,6 +43,7 @@ const Home: React.FC = () => {
           <p>Amount of questions</p>
           <p>{questions.length}</p>
           <Button type="link" text="Open" to={`take-quiz/${id}`} />
+          <Button text="Delete quiz" onClick={() => removeQuizHandler(id)} />
         </li>
       ))}
     </ul>

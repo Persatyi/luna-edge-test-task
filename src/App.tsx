@@ -6,6 +6,7 @@ import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import CreateQuiz from "./pages/CreateQuiz";
 import TakeTheQuiz from "./pages/TakeTheQuiz";
+import Results from "./pages/Results";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="create" element={<CreateQuiz />} />
           <Route path="take-quiz/:id" element={<TakeTheQuiz />} />
+          <Route path="results/:id" element={<Results />} />
         </Route>
       </Routes>
     </>

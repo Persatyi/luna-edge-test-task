@@ -15,6 +15,9 @@ export interface IQuestion {
 }
 
 export interface IQuiz {
+  isMultipleAnswers: boolean;
+  isAbleToReturn: boolean;
+  isTimer: boolean;
   id: number;
   name: string;
   questions: IQuestion[];
@@ -23,6 +26,10 @@ export interface IQuiz {
 const QuizForm: React.FC = () => {
   const [quizName, setQuizName] = useState<string>("");
   const [questions, setQuestions] = useState<IQuestion[]>([]);
+
+  const [isMultipleAnswers, setIsMultipleAnswers] = useState<boolean>(false);
+  const [isAbleToReturn, setIsAbleToReturn] = useState<boolean>(false);
+  const [isTimer, setIsTimer] = useState<boolean>(false);
 
   const addQuestion = () => {
     setQuestions([
@@ -123,20 +130,43 @@ const QuizForm: React.FC = () => {
       name: quizName,
       id: Date.now(),
       questions,
+      isMultipleAnswers,
+      isAbleToReturn,
+      isTimer,
     });
   };
 
   return (
     <>
       <h1 className="text-2xl font-bold mb-4">Quiz Constructor</h1>
-      <p>Type name of your Quiz </p>
-      <input
-        type="text"
-        value={quizName}
-        placeholder="Enter quiz name"
-        onChange={(e) => setQuizName(e.target.value)}
-        className="w-full p-2 mb-2 border border-gray-300 rounded"
-      />
+      <div>
+        <p>Add ability for multiple answers: </p>
+        <input
+          type="checkbox"
+          onChange={(e) => setIsMultipleAnswers(e.target.checked)}
+        />
+      </div>
+      <div>
+        <p>Return to previous questions during the test:</p>
+        <input
+          type="checkbox"
+          onChange={(e) => setIsAbleToReturn(e.target.checked)}
+        />
+      </div>
+      <div>
+        <p>Timer: </p>
+        <input type="checkbox" onChange={(e) => setIsTimer(e.target.checked)} />
+      </div>
+      <div>
+        <p>Type name of your Quiz </p>
+        <input
+          type="text"
+          value={quizName}
+          placeholder="Enter quiz name"
+          onChange={(e) => setQuizName(e.target.value)}
+          className="w-full p-2 mb-2 border border-gray-300 rounded"
+        />
+      </div>
 
       {questions.map((question, index) => (
         <div key={question.id} className="mb-6">
@@ -157,7 +187,7 @@ const QuizForm: React.FC = () => {
           {question.answers.map((answer) => (
             <div key={answer.id} className="flex items-center mb-2">
               <input
-                type="checkbox"
+                type={isMultipleAnswers ? "checkbox" : "radio"}
                 onChange={(e) =>
                   handleCorrectAnswerChange(
                     question.id,

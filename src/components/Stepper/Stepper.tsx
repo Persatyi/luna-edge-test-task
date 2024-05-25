@@ -2,8 +2,6 @@ import s from "./Steper.module.css";
 
 import React from "react";
 
-import { IQuestion } from "../../components/QuizForm/QuizForm";
-
 interface IStepperProps {
   totalSteps: number;
   currentStep: number;

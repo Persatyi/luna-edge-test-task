@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 interface IProps {
   className?: string;
-  type: "button" | "link" | "submit" | "reset" | undefined;
+  type?: "button" | "link" | "submit" | "reset" | undefined;
   text: string;
   onClick?: (
     event:

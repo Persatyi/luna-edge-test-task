@@ -1,17 +1,18 @@
-import React from "react";
-import { Route, Routes } from "react-router-dom";
-import "./App.css";
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
+import './App.css';
 
-import Layout from "./components/Layout";
-import Home from "./pages/Home";
-import CreateQuiz from "./pages/CreateQuiz";
-import TakeTheQuiz from "./pages/TakeTheQuiz";
-import Results from "./pages/Results";
-import EditQuiz from "./pages/EditQuiz";
+import SearchProvider from './components/SearchContext/SearchContext';
+import Layout from './components/Layout';
+import Home from './pages/Home';
+import CreateQuiz from './pages/CreateQuiz';
+import TakeTheQuiz from './pages/TakeTheQuiz';
+import Results from './pages/Results';
+import EditQuiz from './pages/EditQuiz';
 
 function App() {
   return (
-    <>
+    <SearchProvider>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
@@ -21,7 +22,7 @@ function App() {
           <Route path="edit/:id" element={<EditQuiz />} />
         </Route>
       </Routes>
-    </>
+    </SearchProvider>
   );
 }
 

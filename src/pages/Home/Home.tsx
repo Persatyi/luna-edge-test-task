@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
+import { SearchContext } from '../../components/SearchContext/SearchContext';
 import { IQuiz } from '../../components/QuizForm/QuizForm';
 import Button from '../../components/Button';
 
@@ -7,19 +8,46 @@ import API from '../../servises/APIServise';
 
 const Home: React.FC = () => {
   const [quizList, setQuizList] = useState<IQuiz[]>([]);
+  const [loader, setLoader] = useState<boolean>(false);
+
+  const searchContext = useContext(SearchContext);
+
+  if (!searchContext) {
+    throw new Error('HomePage must be used within a SearchProvider');
+  }
+
+  const { searchTerm } = searchContext;
 
   useEffect(() => {
+    setLoader(true);
     const getAllQuizzes = async () => {
       try {
         const response = await API.getAllQuizzes();
+        setLoader(false);
         setQuizList(response);
       } catch (error) {
+        setLoader(false);
         console.log(error);
       }
     };
 
     getAllQuizzes();
-  });
+  }, []);
+
+  useEffect(() => {
+    const findQuiz = async () => {
+      try {
+        const response = await API.findQuiz(searchTerm);
+        setLoader(false);
+        setQuizList(response);
+      } catch (error) {
+        setLoader(false);
+        setQuizList([]);
+      }
+    };
+
+    findQuiz();
+  }, [searchTerm]);
 
   const removeQuizHandler = async (id: number) => {
     try {
@@ -30,19 +58,12 @@ const Home: React.FC = () => {
     }
   };
 
-  if (quizList.length === 0) {
+  if (loader) {
     return <p>Loading...</p>;
   }
 
   return (
     <>
-      <Button
-        type="link"
-        to="/create"
-        text="Create new quiz"
-        className="block w-52 mt-3 mb-3 text-center font-semibold text-white border-white border-2 p-2 rounded bg-purple"
-      />
-
       <ul>
         {quizList.map(({ name, id, questions }) => (
           <li key={id} className="flex mb-1 w-full border-2 border-gray p-2 rounded bg-gray-light">

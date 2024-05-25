@@ -8,6 +8,7 @@ class APIServise {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         const isNull = get(QUIZZES);
+
         if (isNull === null) {
           save(QUIZZES, [quiz]);
           resolve(get(QUIZZES));
@@ -62,6 +63,26 @@ class APIServise {
         save(QUIZZES, updatedlist);
 
         response(updatedlist);
+      }, this.delay);
+    });
+  }
+
+  findQuiz(query: string) {
+    return new Promise<IQuiz[]>((response, reject) => {
+      setTimeout(() => {
+        const quizzes: IQuiz[] = get(QUIZZES);
+        const filteredQuizes: IQuiz[] = [];
+        quizzes.forEach(el => {
+          if (el.name.toLowerCase().includes(query.toLowerCase())) {
+            filteredQuizes.push(el);
+          }
+        });
+
+        if (filteredQuizes.length !== 0) {
+          response(filteredQuizes);
+        } else {
+          reject('No matches found.');
+        }
       }, this.delay);
     });
   }

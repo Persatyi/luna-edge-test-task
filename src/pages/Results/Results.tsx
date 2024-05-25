@@ -1,14 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useLocation, Link } from "react-router-dom";
-import API from "../../servises/APIServise";
+import React, { useEffect, useState } from 'react';
+import { useParams, useLocation, Link } from 'react-router-dom';
+import API from '../../servises/APIServise';
 
-import { IQuiz } from "../../components/QuizForm/QuizForm";
+import { IQuiz } from '../../components/QuizForm/QuizForm';
 
-import Button from "../../components/Button/Button";
-
-interface ILocationState {
-  answers: Record<number, number>;
-}
+import spriteSvg from '../../assets/images/sprite/sprite.svg';
 
 const Results = () => {
   const { id } = useParams<{ id?: string }>();
@@ -28,16 +24,16 @@ const Results = () => {
               setQuiz(response);
               calculateResults(response);
             } else {
-              console.error("Quiz not found");
+              console.error('Quiz not found');
             }
           } catch (error) {
-            console.error("Error fetching quiz data:", error);
+            console.error('Error fetching quiz data:', error);
           }
         } else {
-          console.error("Invalid quiz ID");
+          console.error('Invalid quiz ID');
         }
       } else {
-        console.error("Quiz ID is undefined");
+        console.error('Quiz ID is undefined');
       }
     };
 
@@ -49,15 +45,15 @@ const Results = () => {
     let correctCount = 0;
     let incorrectCount = 0;
 
-    quiz.questions.forEach((question) => {
+    quiz.questions.forEach(question => {
       const userAnswerIds = userAnswers[question.id] ?? [];
       const correctAnswerIds = question.answers
-        .filter((answer) => answer.isCorrect)
-        .map((answer) => answer.id);
+        .filter(answer => answer.isCorrect)
+        .map(answer => answer.id);
 
       const isCorrect =
         correctAnswerIds.length === userAnswerIds.length &&
-        correctAnswerIds.every((id) => userAnswerIds.includes(id));
+        correctAnswerIds.every(id => userAnswerIds.includes(id));
 
       if (isCorrect) {
         correctCount += 1;
@@ -76,10 +72,15 @@ const Results = () => {
 
   return (
     <div>
-      <h1>{quiz && quiz.name} - Results</h1>
-      <p>Correct answers: {correctAnswersCount}</p>
-      <p>Incorrect answers: {incorrectAnswersCount}</p>
-      <Button type="link" text="Back to homepage" to={"/"} />
+      <Link className="flex items-center gap-2 text-white rounded p-3 w-40 h-6 bg-gray" to="/">
+        <svg style={{ width: '15px', height: '15px', fill: '#ffffff' }}>
+          <use href={`${spriteSvg}#icon-home`}></use>
+        </svg>
+        To homepage
+      </Link>
+      <h1 className="text-2xl text-center font-bold mb-4">{quiz && quiz.name} - results</h1>
+      <p className="font-bold flex items-center">Correct answers: {correctAnswersCount}</p>
+      <p className="font-bold flex items-center">Incorrect answers: {incorrectAnswersCount}</p>
     </div>
   );
 };

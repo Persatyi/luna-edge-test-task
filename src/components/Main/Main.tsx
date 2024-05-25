@@ -1,11 +1,11 @@
-import React from "react";
-import { Outlet } from "react-router-dom";
+import React from 'react';
+import { Outlet } from 'react-router-dom';
 
-import Container from "../Container";
+import Container from '../Container';
 
 const Main = () => {
   return (
-    <main>
+    <main className="pt-4 pb-4">
       <Container>
         <Outlet />
       </Container>

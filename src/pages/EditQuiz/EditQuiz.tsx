@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 
 import API from '../../servises/APIServise';
 
 import { IQuiz, IQuestion, IAnswerOption } from '../../components/QuizForm/QuizForm';
+import Button from '../../components/Button';
+
+import spriteSvg from '../../assets/images/sprite/sprite.svg';
 
 const EditQuiz = () => {
   const { id } = useParams<{ id: string }>();
@@ -155,57 +158,81 @@ const EditQuiz = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Edit Quiz</h1>
+    <>
+      <Link className="flex items-center gap-2 text-white rounded p-3 w-40 h-6 bg-gray" to="/">
+        <svg style={{ width: '15px', height: '15px', fill: '#ffffff' }}>
+          <use href={`${spriteSvg}#icon-home`}></use>
+        </svg>
+        To homepage
+      </Link>
+      <h1 className="text-2xl text-center font-bold mb-4">Edit Quiz</h1>
+
+      <div className="flex items-center">
+        <label className="font-bold flex items-center">
+          Multiple answers:
+          <input
+            className="ml-1 w-4 h-4"
+            type="checkbox"
+            onChange={e => handleMultipleAnswers(e)}
+            checked={quiz?.isMultipleAnswers}
+          />
+        </label>
+      </div>
+      <div className="flex items-center">
+        <label className="font-bold flex items-center">
+          Return to previous question:
+          <input
+            className="ml-1 w-4 h-4"
+            type="checkbox"
+            onChange={e => handleAbleToReturn(e)}
+            checked={quiz?.isAbleToReturn}
+          />
+        </label>
+      </div>
+      <div className="flex items-center mb-3">
+        <label className="font-bold flex items-center">
+          Timer:
+          <input
+            className="ml-1 w-4 h-4"
+            type="checkbox"
+            onChange={e => handleIsTimer(e)}
+            checked={quiz?.isTimer}
+          />
+        </label>
+      </div>
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">Quiz Name</label>
+        <label className="block text-sm font-bold ">Quiz Name</label>
         <input
           type="text"
           value={quiz?.name}
           onChange={handleNameChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          className="w-full p-2 mb-2 border border-gray rounded"
         />
-      </div>
-      <div className="flex">
-        <p>Multiple answers: </p>
-        <input
-          type="checkbox"
-          onChange={e => handleMultipleAnswers(e)}
-          checked={quiz?.isMultipleAnswers}
-        />
-      </div>
-      <div className="flex">
-        <p>Return to previous question:</p>
-        <input
-          type="checkbox"
-          onChange={e => handleAbleToReturn(e)}
-          checked={quiz?.isAbleToReturn}
-        />
-      </div>
-      <div className="flex">
-        <p>Timer: </p>
-        <input type="checkbox" onChange={e => handleIsTimer(e)} checked={quiz?.isTimer} />
       </div>
       {quiz?.questions.map((question, qIndex) => (
-        <div key={question.id} className="mb-6">
-          <label className="block text-sm font-medium text-gray-700">Question {qIndex + 1}</label>
+        <div key={question.id} className="mb-6 border-gray bg-gray-light border-2 rounded p-2">
+          <div className="flex mb-3">
+            <p className="font-bold">Question {qIndex + 1}</p>
+            <button
+              onClick={() => handleRemoveQuestion(qIndex)}
+              className="ml-auto bg-red text-white p-2 rounded"
+            >
+              <svg style={{ width: '12px', height: '12px', fill: '#ffffff' }}>
+                <use href={`${spriteSvg}#icon-cross`}></use>
+              </svg>
+            </button>
+          </div>
           <input
             type="text"
             value={question.text}
             onChange={e => handleQuestionChange(qIndex, e)}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            className="w-full p-2 mb-2 border border-gray rounded"
           />
-          <button
-            type="button"
-            onClick={() => handleRemoveQuestion(qIndex)}
-            className="mt-2 text-red-500 hover:text-red-700"
-          >
-            Remove Question
-          </button>
           <div className="mt-4 space-y-2">
             {question.answers.map((answer, aIndex) => (
-              <div key={answer.id} className="flex items-center">
+              <div key={answer.id} className="flex items-center mb-2 gap-1">
                 <input
+                  className="w-14 h-14 rounded"
                   type={quiz.isMultipleAnswers ? 'checkbox' : 'radio'}
                   checked={answer.isCorrect}
                   onChange={e =>
@@ -216,42 +243,36 @@ const EditQuiz = () => {
                   type="text"
                   value={answer.text}
                   onChange={e => handleAnswerChange(qIndex, aIndex, e)}
-                  className="flex-grow mr-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  className="w-full p-2 border border-gray rounded"
                 />
-                <button
-                  type="button"
+                <Button
+                  text="Remove answer"
                   onClick={() => handleRemoveAnswer(qIndex, aIndex)}
-                  className="text-red-500 hover:text-red-700"
-                >
-                  Remove
-                </button>
+                  className="bg-red text-white px-4 py-2 h-6 w-48 rounded"
+                />
               </div>
             ))}
-            <button
-              type="button"
+            <Button
+              text="Add answer"
               onClick={() => handleAddAnswer(qIndex)}
-              className="mt-2 text-blue-500 hover:text-blue-700"
-            >
-              Add Answer
-            </button>
+              className="bg-blue text-white px-4 py-2 rounded"
+            />
           </div>
         </div>
       ))}
-      <button
-        type="button"
-        onClick={handleAddQuestion}
-        className="mt-4 text-blue-500 hover:text-blue-700"
-      >
-        Add Question
-      </button>
-      <button
-        type="button"
-        onClick={handleSubmit}
-        className="mt-6 block w-full bg-indigo-600 text-white py-2 rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-      >
-        Save Quiz
-      </button>
-    </div>
+      <div className="flex gap-2">
+        <Button
+          text="Add Question"
+          onClick={handleAddQuestion}
+          className="bg-blue text-white px-4 py-2 rounded"
+        />
+        <Button
+          text="Save Changes"
+          onClick={handleSubmit}
+          className="bg-green text-white px-4 py-2 rounded"
+        />
+      </div>
+    </>
   );
 };
 

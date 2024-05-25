@@ -31,7 +31,7 @@ const Home: React.FC = () => {
   };
 
   if (quizList.length === 0) {
-    return <p>Here is no quizzes yet.</p>;
+    return <p>Loading...</p>;
   }
 
   return (
@@ -45,7 +45,7 @@ const Home: React.FC = () => {
 
       <ul>
         {quizList.map(({ name, id, questions }) => (
-          <li key={id} className="flex w-full border-2 border-gray p-2 rounded bg-gray-light">
+          <li key={id} className="flex mb-1 w-full border-2 border-gray p-2 rounded bg-gray-light">
             <div className="flex-row">
               <div className="flex">
                 <p className="text-5 font-semibold">

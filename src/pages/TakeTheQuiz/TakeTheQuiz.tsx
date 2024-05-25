@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 
-import { IQuiz } from "../../components/QuizForm/QuizForm";
+import { IQuiz } from '../../components/QuizForm/QuizForm';
 
-import API from "../../servises/APIServise";
+import API from '../../servises/APIServise';
 
-import Stepper from "../../components/Stepper";
+import Stepper from '../../components/Stepper';
+import Button from '../../components/Button';
 
 const TakeTheQuiz = () => {
   const { id } = useParams<{ id: string }>();
@@ -27,16 +28,16 @@ const TakeTheQuiz = () => {
             if (response !== undefined) {
               setQuiz(response);
             } else {
-              console.log("Quiz is not found!");
+              console.log('Quiz is not found!');
             }
           } catch (error) {
-            console.log("Error fetching quiz data:", error);
+            console.log('Error fetching quiz data:', error);
           }
         } else {
-          console.error("Invalid quiz ID");
+          console.error('Invalid quiz ID');
         }
       } else {
-        console.error("Quiz ID is undefined");
+        console.error('Quiz ID is undefined');
       }
     };
 
@@ -56,7 +57,7 @@ const TakeTheQuiz = () => {
   };
 
   const handleAnswerChange = (questionId: number, answerId: number) => {
-    setAnswers((prevAnswers) => {
+    setAnswers(prevAnswers => {
       const currentAnswers = prevAnswers[questionId] || [];
 
       let updatedAnswers;
@@ -64,7 +65,7 @@ const TakeTheQuiz = () => {
       if (quiz?.isMultipleAnswers) {
         if (currentAnswers.includes(answerId)) {
           // Видалення відповіді, якщо вона вже обрана
-          updatedAnswers = currentAnswers.filter((id) => id !== answerId);
+          updatedAnswers = currentAnswers.filter(id => id !== answerId);
         } else {
           // Додавання відповіді, якщо вона ще не обрана
           updatedAnswers = [...currentAnswers, answerId];
@@ -97,21 +98,20 @@ const TakeTheQuiz = () => {
   if (quiz !== null) {
     return (
       <div>
-        <h1>{quiz.name}</h1>
+        <h1 className="text-2xl text-center font-bold mb-4">{quiz.name}</h1>
         <div>
-          <h2>{currentQuestion.text}</h2>
+          <h2 className="font-bold mb-1">{currentQuestion.text}</h2>
           <ul>
-            {currentQuestion.answers.map((answer) => (
-              <li key={answer.id}>
-                <label>
+            {currentQuestion.answers.map(answer => (
+              <li key={answer.id} className="mb-2 border-gray border-2 rounded p-2">
+                <label className="flex items-center text-base">
                   <input
-                    type={quiz.isMultipleAnswers ? "checkbox" : "radio"}
+                    type={quiz.isMultipleAnswers ? 'checkbox' : 'radio'}
                     name={`question-${currentQuestion.id}`}
                     value={answer.id}
                     checked={currentAnswer.includes(answer.id)}
-                    onChange={() =>
-                      handleAnswerChange(currentQuestion.id, answer.id)
-                    }
+                    onChange={() => handleAnswerChange(currentQuestion.id, answer.id)}
+                    className="w-4 h-4 rounded mr-2"
                   />
                   {answer.text}
                 </label>
@@ -120,29 +120,30 @@ const TakeTheQuiz = () => {
           </ul>
         </div>
         <div>
-          {quiz.isAbleToReturn && (
-            <button
+          {currentQuestionIndex !== 0 && quiz.isAbleToReturn && (
+            <Button
+              text="Previous"
               onClick={handlePreviousQuestion}
               disabled={currentQuestionIndex === 0}
-            >
-              Previous
-            </button>
+              className="bg-blue text-white p-4 py-2 rounded mr-1"
+            />
           )}
           {currentQuestionIndex === quiz.questions.length - 1 ? (
-            <button onClick={handleFinishQuiz}>Finish</button>
+            <Button
+              text="Finish"
+              onClick={handleFinishQuiz}
+              className="bg-green text-white p-4 py-2 rounded"
+            />
           ) : (
-            <button
+            <Button
+              text="Next"
               onClick={handleNextQuestion}
               disabled={currentQuestionIndex === quiz.questions.length - 1}
-            >
-              Next
-            </button>
+              className="bg-blue text-white p-4 py-2 rounded"
+            />
           )}
         </div>
-        <Stepper
-          totalSteps={quiz.questions.length}
-          currentStep={currentQuestionIndex}
-        />
+        <Stepper totalSteps={quiz.questions.length} currentStep={currentQuestionIndex} />
       </div>
     );
   } else {

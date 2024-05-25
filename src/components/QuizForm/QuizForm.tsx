@@ -141,7 +141,7 @@ const QuizForm: React.FC = () => {
           <label className="font-bold flex items-center">
             Multiple answers:
             <input
-              className="ml-1 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+              className="ml-1 w-4 h-4"
               type="checkbox"
               onChange={e => setIsMultipleAnswers(e.target.checked)}
             />
@@ -151,7 +151,7 @@ const QuizForm: React.FC = () => {
           <label className="font-bold flex items-center">
             Return to previous question:
             <input
-              className="ml-1 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+              className="ml-1 w-4 h-4"
               type="checkbox"
               onChange={e => setIsAbleToReturn(e.target.checked)}
             />
@@ -180,7 +180,7 @@ const QuizForm: React.FC = () => {
       </div>
 
       {questions.map((question, index) => (
-        <div key={question.id} className="mb-6 border-gray border-2 rounded p-2">
+        <div key={question.id} className="mb-6 border-gray border-2 rounded p-2 bg-gray-light">
           <div className="flex mb-4">
             <p className="font-bold">Question №{index + 1}</p>
             <button
@@ -197,10 +197,10 @@ const QuizForm: React.FC = () => {
             placeholder="Enter question"
             value={question.text}
             onChange={e => handleQuestionChange(question.id, e.target.value)}
-            className="w-full p-2 mb-2 border border-gray-300 rounded"
+            className="w-full p-2 mb-2 border border-gray rounded"
           />
           {question.answers.map(answer => (
-            <div key={answer.id} className="flex items-center mb-2 gap-1">
+            <div key={answer.id} className="flex items-center mb-2 gap-1 ">
               <input
                 className="w-14 h-14 rounded"
                 type="checkbox"
@@ -211,7 +211,7 @@ const QuizForm: React.FC = () => {
                 placeholder="Enter answer"
                 value={answer.text}
                 onChange={e => handleAnswerChange(question.id, answer.id, e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded"
+                className="w-full p-2 border border-gray rounded"
               />
               <Button
                 text="Remove answer"
@@ -221,7 +221,7 @@ const QuizForm: React.FC = () => {
             </div>
           ))}
           <Button
-            text="Add answer option"
+            text="Add answer"
             onClick={() => addAnswerOption(question.id)}
             className="bg-blue text-white px-4 py-2 rounded"
           />

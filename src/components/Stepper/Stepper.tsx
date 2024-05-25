@@ -1,6 +1,4 @@
-import s from "./Steper.module.css";
-
-import React from "react";
+import React from 'react';
 
 interface IStepperProps {
   totalSteps: number;
@@ -9,11 +7,13 @@ interface IStepperProps {
 
 const Stepper: React.FC<IStepperProps> = ({ totalSteps, currentStep }) => {
   return (
-    <div className={s.stepper}>
+    <div className="flex justify-center mt-4">
       {Array.from({ length: totalSteps }, (_, index) => (
         <span
           key={index}
-          className={`${s.step} ${index === currentStep ? s.current : ""}`}
+          className={`flex items-center justify-center w-4 h-4 rounded-full  ${
+            index === currentStep ? 'bg-blue text-white' : 'bg-gray-light'
+          }`}
         >
           {index + 1}
         </span>

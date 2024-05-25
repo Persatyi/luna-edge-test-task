@@ -1,13 +1,11 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
 
-import QuizForm from "../../components/QuizForm";
+import QuizForm from '../../components/QuizForm';
 
 const CreateQuiz: React.FC = () => {
   return (
     <>
       <QuizForm />
-      <Link to="/">Back to home</Link>
     </>
   );
 };

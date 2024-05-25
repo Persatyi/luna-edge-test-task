@@ -1,7 +1,9 @@
-import { save, get, QUIZZES } from "../localStorage/localStorage";
-import { IQuiz } from "../components/QuizForm/QuizForm";
+import { save, get, QUIZZES } from '../localStorage/localStorage';
+import { IQuiz } from '../components/QuizForm/QuizForm';
 
 class APIServise {
+  delay = 1000;
+
   addQuiz(quiz: IQuiz) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -14,7 +16,7 @@ class APIServise {
           save(QUIZZES, [...quizzes, quiz]);
           resolve(get(QUIZZES));
         }
-      }, 1000);
+      }, this.delay);
     });
   }
 
@@ -22,7 +24,7 @@ class APIServise {
     return new Promise<IQuiz[]>((resolve, reject) => {
       setTimeout(() => {
         resolve(get(QUIZZES));
-      }, 1000);
+      }, this.delay);
     });
   }
 
@@ -30,14 +32,14 @@ class APIServise {
     return new Promise<IQuiz | undefined>((resolve, reject) => {
       setTimeout(() => {
         const quizList: IQuiz[] = get(QUIZZES);
-        const quiz: IQuiz | undefined = quizList.find((quiz) => quiz.id === id);
+        const quiz: IQuiz | undefined = quizList.find(quiz => quiz.id === id);
 
         if (quiz === undefined) {
-          reject(new Error("Quiz not found"));
+          reject(new Error('Quiz not found'));
         }
 
         resolve(quiz);
-      }, 1000);
+      }, this.delay);
     });
   }
 
@@ -48,7 +50,19 @@ class APIServise {
         const quiz = quizzes.filter((quiz: IQuiz) => quiz.id !== quizId);
         save(QUIZZES, quiz);
         resolve(get(QUIZZES));
-      }, 1000);
+      }, this.delay);
+    });
+  }
+
+  updateQuiz(quiz: IQuiz) {
+    return new Promise((response, reject) => {
+      setTimeout(() => {
+        const quizzes: IQuiz[] = get(QUIZZES);
+        const updatedlist = quizzes.map(item => (item.id === quiz.id ? quiz : item));
+        save(QUIZZES, updatedlist);
+
+        response(updatedlist);
+      }, this.delay);
     });
   }
 }

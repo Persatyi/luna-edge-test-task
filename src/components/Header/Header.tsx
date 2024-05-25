@@ -1,14 +1,11 @@
-import React from "react";
-import { Link } from "react-router-dom";
-
-import Container from "../Container";
+import React from 'react';
+import Container from '../Container';
 
 const Header = () => {
   return (
-    <header className="pt-5 pb-5">
+    <header className="pt-5 pb-5 bg-blue">
       <Container>
-        <h1>Welcome to Quiz</h1>
-        <Link to="/create">Create new quiz</Link>
+        <h1 className="text-2xl text-white text-center font-bold">Welcome to Quiz</h1>
       </Container>
     </header>
   );

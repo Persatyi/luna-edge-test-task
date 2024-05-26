@@ -24,7 +24,13 @@ class APIServise {
   getAllQuizzes() {
     return new Promise<IQuiz[]>((resolve, reject) => {
       setTimeout(() => {
-        resolve(get(QUIZZES));
+        const isNull = get(QUIZZES);
+
+        if (isNull === null) {
+          reject('localStorage is empty');
+        } else {
+          resolve(get(QUIZZES));
+        }
       }, this.delay);
     });
   }
@@ -71,17 +77,21 @@ class APIServise {
     return new Promise<IQuiz[]>((response, reject) => {
       setTimeout(() => {
         const quizzes: IQuiz[] = get(QUIZZES);
-        const filteredQuizes: IQuiz[] = [];
-        quizzes.forEach(el => {
-          if (el.name.toLowerCase().includes(query.toLowerCase())) {
-            filteredQuizes.push(el);
-          }
-        });
-
-        if (filteredQuizes.length !== 0) {
-          response(filteredQuizes);
+        if (quizzes === null) {
+          reject('localStorage is empty');
         } else {
-          reject('No matches found.');
+          const filteredQuizes: IQuiz[] = [];
+          quizzes.forEach(el => {
+            if (el.name.toLowerCase().includes(query.toLowerCase())) {
+              filteredQuizes.push(el);
+            }
+          });
+
+          if (filteredQuizes.length !== 0) {
+            response(filteredQuizes);
+          } else {
+            reject('No matches found.');
+          }
         }
       }, this.delay);
     });

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import './App.css';
 
 import SearchProvider from './components/SearchContext/SearchContext';
 import Layout from './components/Layout';
@@ -9,6 +8,7 @@ import CreateQuiz from './pages/CreateQuiz';
 import TakeTheQuiz from './pages/TakeTheQuiz';
 import Results from './pages/Results';
 import EditQuiz from './pages/EditQuiz';
+import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 
 function App() {
   return (
@@ -21,6 +21,7 @@ function App() {
           <Route path="results/:id" element={<Results />} />
           <Route path="edit/:id" element={<EditQuiz />} />
         </Route>
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </SearchProvider>
   );

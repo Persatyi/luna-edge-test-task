@@ -7,6 +7,7 @@ import API from '../../servises/APIServise';
 
 import Stepper from '../../components/Stepper';
 import Button from '../../components/Button';
+import Timer from '../../components/Timer';
 
 const TakeTheQuiz = () => {
   const { id } = useParams<{ id: string }>();
@@ -15,6 +16,11 @@ const TakeTheQuiz = () => {
   const [quiz, setQuiz] = useState<IQuiz | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [answers, setAnswers] = useState<Record<number, number[]>>({});
+  const [key, setKey] = useState(0);
+
+  useEffect(() => {
+    setKey(prevKey => prevKey + 1); // Increment key to reset timer
+  }, [currentQuestionIndex]);
 
   useEffect(() => {
     const getQuiz = async () => {
@@ -99,6 +105,20 @@ const TakeTheQuiz = () => {
     return (
       <div>
         <h1 className="text-2xl text-center font-bold mb-4">{quiz.name}</h1>
+        {quiz.isTimer && (
+          <Timer duration={quiz.quizDuration} onTimeUp={handleFinishQuiz} key={key} />
+        )}
+        {quiz.isTimerPerQuestion && (
+          <Timer
+            duration={quiz.questionDuration}
+            onTimeUp={
+              currentQuestionIndex === quiz.questions.length - 1
+                ? handleFinishQuiz
+                : handleNextQuestion
+            }
+            key={key}
+          />
+        )}
         <div>
           <h2 className="font-bold mb-1">{currentQuestion.text}</h2>
           <ul>

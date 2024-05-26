@@ -109,6 +109,7 @@ const EditQuiz = () => {
         id: Date.now(),
         text: '',
         isCorrect: false,
+        points: 0,
       };
       const updatedQuestions = [...quiz.questions];
       updatedQuestions[questionIndex].answers.push(newAnswer);

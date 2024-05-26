@@ -5,7 +5,7 @@ import Container from '../Container';
 
 const Main = () => {
   return (
-    <main className="pt-4 pb-4">
+    <main className="flex flex-col min-h-screen pt-4 pb-4">
       <Container>
         <Outlet />
       </Container>

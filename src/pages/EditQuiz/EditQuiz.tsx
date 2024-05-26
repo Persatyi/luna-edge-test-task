@@ -85,6 +85,24 @@ const EditQuiz = () => {
     }
   };
 
+  const handleTimerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (quiz) {
+      setQuiz({ ...quiz, quizDuration: Number.parseInt(e.target.value) });
+    }
+  };
+
+  const setIsTimerPerQuestion = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (quiz) {
+      setQuiz({ ...quiz, isTimerPerQuestion: e.target.checked });
+    }
+  };
+
+  const handleTimerChangePerQuestion = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (quiz) {
+      setQuiz({ ...quiz, questionDuration: Number.parseInt(e.target.value) });
+    }
+  };
+
   const handleAddQuestion = () => {
     if (quiz) {
       const newQuestion: IQuestion = {
@@ -127,14 +145,19 @@ const EditQuiz = () => {
     }
   };
 
-  const handleCorrectAnswerChange = (questionId: number, answerId: number, isCorrect: boolean) => {
+  const handleCorrectAnswerChange = (
+    questionId: number,
+    answerId: number,
+    isCorrect: boolean,
+    points: number = 0,
+  ) => {
     if (quiz) {
       const updatedQuestions = quiz.questions.map(q => {
         if (q.id === questionId) {
           return {
             ...q,
             answers: q.answers.map(answer =>
-              answer.id === answerId ? { ...answer, isCorrect } : answer,
+              answer.id === answerId ? { ...answer, isCorrect, points } : answer,
             ),
           };
         }
@@ -190,17 +213,55 @@ const EditQuiz = () => {
           />
         </label>
       </div>
-      <div className="flex items-center mb-3">
-        <label className="font-bold flex items-center">
-          Timer:
-          <input
-            className="ml-1 w-4 h-4"
-            type="checkbox"
-            onChange={e => handleIsTimer(e)}
-            checked={quiz?.isTimer}
-          />
-        </label>
-      </div>
+      {!quiz?.isTimerPerQuestion && (
+        <div className="flex items-center">
+          <label className="font-bold flex items-center">
+            Timer:
+            <input
+              className="ml-1 w-4 h-4 text-blue-600 bg-gray border-gray rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+              type="checkbox"
+              onChange={e => handleIsTimer(e)}
+              checked={quiz?.isTimer}
+            />
+          </label>
+          {quiz?.isTimer && (
+            <label className="ml-4 font-bold flex items-center">
+              Type amount of seconds:
+              <input
+                type="number"
+                placeholder="Seconds"
+                value={quiz.quizDuration}
+                onChange={e => handleTimerChange(e)}
+                className="ml-2 w-32 h-5  p-2 border border-gray rounded font-normal"
+              />
+            </label>
+          )}
+        </div>
+      )}
+      {!quiz?.isTimer && (
+        <div className="flex items-center">
+          <label className="font-bold flex items-center">
+            Timer per question:
+            <input
+              className="ml-1 w-4 h-4"
+              type="checkbox"
+              onChange={e => setIsTimerPerQuestion(e)}
+            />
+          </label>
+          {quiz?.isTimerPerQuestion && (
+            <label className="ml-4 font-bold flex items-center">
+              Type amount of seconds:
+              <input
+                type="number"
+                placeholder="Seconds"
+                value={quiz.questionDuration}
+                onChange={e => handleTimerChangePerQuestion(e)}
+                className="ml-2 w-32 h-5  p-2 border border-gray rounded font-normal"
+              />
+            </label>
+          )}
+        </div>
+      )}
       <div className="mb-4">
         <label className="block text-sm font-bold ">Quiz Name</label>
         <input
@@ -234,12 +295,29 @@ const EditQuiz = () => {
               <div key={answer.id} className="flex items-center mb-2 gap-1">
                 <input
                   className="w-14 h-14 rounded"
-                  type={quiz.isMultipleAnswers ? 'checkbox' : 'radio'}
+                  type="checkbox"
                   checked={answer.isCorrect}
                   onChange={e =>
                     handleCorrectAnswerChange(question.id, answer.id, e.target.checked)
                   }
                 />
+                {answer.isCorrect && (
+                  <input
+                    type="number"
+                    step="0.1"
+                    placeholder="Points"
+                    value={answer.points}
+                    onChange={e =>
+                      handleCorrectAnswerChange(
+                        question.id,
+                        answer.id,
+                        answer.isCorrect,
+                        parseFloat(e.target.value),
+                      )
+                    }
+                    className="w-24 p-2 border border-gray rounded"
+                  />
+                )}
                 <input
                   type="text"
                   value={answer.text}

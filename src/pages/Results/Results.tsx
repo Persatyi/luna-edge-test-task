@@ -12,6 +12,7 @@ const Results = () => {
   const [quiz, setQuiz] = useState<IQuiz | null>(null);
   const [correctAnswersCount, setCorrectAnswersCount] = useState<number>(0);
   const [incorrectAnswersCount, setIncorrectAnswersCount] = useState<number>(0);
+  const [totalPoints, setTotalPoints] = useState<number>(0);
 
   useEffect(() => {
     const fetchQuiz = async () => {
@@ -44,6 +45,7 @@ const Results = () => {
     const userAnswers = location.state.answers || {};
     let correctCount = 0;
     let incorrectCount = 0;
+    let points = 0;
 
     quiz.questions.forEach(question => {
       const userAnswerIds = userAnswers[question.id] ?? [];
@@ -57,6 +59,9 @@ const Results = () => {
 
       if (isCorrect) {
         correctCount += 1;
+        points += question.answers
+          .filter(answer => userAnswerIds.includes(answer.id) && answer.isCorrect)
+          .reduce((acc, answer) => acc + answer.points, 0);
       } else {
         incorrectCount += 1;
       }
@@ -64,6 +69,7 @@ const Results = () => {
 
     setCorrectAnswersCount(correctCount);
     setIncorrectAnswersCount(incorrectCount);
+    setTotalPoints(points);
   };
 
   if (!quiz) {
@@ -81,6 +87,27 @@ const Results = () => {
       <h1 className="text-2xl text-center font-bold mb-4">{quiz && quiz.name} - results</h1>
       <p className="font-bold flex items-center">Correct answers: {correctAnswersCount}</p>
       <p className="font-bold flex items-center">Incorrect answers: {incorrectAnswersCount}</p>
+      <p className="font-bold flex items-center">Total Points: {totalPoints}</p>
+      <div>
+        <h2 className="text-xl font-bold mt-4">Review your answers:</h2>
+        {quiz.questions.map(question => (
+          <div key={question.id} className="mt-2">
+            <h3 className="font-semibold">{question.text}</h3>
+            {question.answers.map(answer => (
+              <div key={answer.id} className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={location.state?.answers[question.id]?.includes(answer.id) || false}
+                  readOnly
+                />
+                <span className={`ml-2 ${answer.isCorrect ? 'text-green' : 'text-red'}`}>
+                  {answer.text} ({answer.points} points)
+                </span>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

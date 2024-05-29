@@ -1,5 +1,4 @@
-import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext } from 'react';
 
 import Container from '../Container';
 import Button from '../Button';
@@ -9,7 +8,6 @@ import spriteSvg from '../../assets/images/sprite/sprite.svg';
 
 const Header: React.FC = () => {
   const searchContext = useContext(SearchContext);
-  // const [localSearchTerm, setLocalSearchTerm] = useState<string>('');
 
   if (!searchContext) {
     throw new Error('Header must be used within a SearchProvider');
@@ -34,9 +32,13 @@ const Header: React.FC = () => {
   return (
     <header className="pt-5 pb-5 bg-blue">
       <Container>
-        <Link to="/">
-          <h1 className="text-2xl text-white text-center font-bold">Welcome to Quiz</h1>
-        </Link>
+        <Button
+          type="link"
+          to="/"
+          text="Welcome to Quiz"
+          className="block mr-auto ml-auto text-2xl text-white text-center font-bold"
+        />
+
         <div className="flex">
           <label className="font-bold flex items-center text-white">
             Find quiz:

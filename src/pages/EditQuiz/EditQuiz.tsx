@@ -275,14 +275,17 @@ const EditQuiz = () => {
         <div key={question.id} className="mb-6 border-gray bg-gray-light border-2 rounded p-2">
           <div className="flex mb-3">
             <p className="font-bold">Question {qIndex + 1}</p>
-            <button
+            <Button
+              isText={false}
               onClick={() => handleRemoveQuestion(qIndex)}
               className="ml-auto bg-red text-white p-2 rounded"
-            >
-              <svg style={{ width: '12px', height: '12px', fill: '#ffffff' }}>
-                <use href={`${spriteSvg}#icon-cross`}></use>
-              </svg>
-            </button>
+              imagePosition="beforeText"
+              image={
+                <svg style={{ width: '12px', height: '12px', fill: '#ffffff' }}>
+                  <use href={`${spriteSvg}#icon-cross`}></use>
+                </svg>
+              }
+            />
           </div>
           <input
             type="text"
@@ -325,9 +328,9 @@ const EditQuiz = () => {
                   className="w-full p-2 border border-gray rounded"
                 />
                 <Button
-                  text="Remove answer"
+                  text="Remove"
                   onClick={() => handleRemoveAnswer(qIndex, aIndex)}
-                  className="bg-red text-white px-4 py-2 h-6 w-48 rounded"
+                  className="bg-red text-xs text-white px-4 py-2 h-6 w-18 rounded"
                 />
               </div>
             ))}

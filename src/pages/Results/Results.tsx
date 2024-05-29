@@ -90,9 +90,11 @@ const Results = () => {
       <p className="font-bold flex items-center">Total Points: {totalPoints}</p>
       <div>
         <h2 className="text-xl font-bold mt-4">Review your answers:</h2>
-        {quiz.questions.map(question => (
+        {quiz.questions.map((question, index) => (
           <div key={question.id} className="mt-2">
-            <h3 className="font-semibold">{question.text}</h3>
+            <h3 className="font-semibold">
+              Question № {index + 1} {question.text}
+            </h3>
             {question.answers.map(answer => (
               <div key={answer.id} className="flex items-center">
                 <input

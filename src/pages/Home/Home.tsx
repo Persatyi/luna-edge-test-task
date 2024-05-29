@@ -3,6 +3,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { SearchContext } from '../../components/SearchContext/SearchContext';
 import { IQuiz } from '../../components/QuizForm/QuizForm';
 import Button from '../../components/Button';
+import Loader from '../../components/Loader';
 
 import API from '../../servises/APIServise';
 
@@ -94,9 +95,10 @@ const Home: React.FC = () => {
                 className="block rounded bg-orange p-2 text-white font-semibold h-6"
               />
               <Button
+                imagePosition="beforeText"
                 text="Delete quiz"
                 onClick={() => removeQuizHandler(id)}
-                className="block rounded bg-red p-2 text-white font-semibold h-6"
+                className="flex items-center rounded bg-red p-2 text-white font-semibold h-6"
               />
             </div>
           </li>

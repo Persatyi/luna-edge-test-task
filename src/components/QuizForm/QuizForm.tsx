@@ -126,6 +126,10 @@ const QuizForm: React.FC = () => {
   };
 
   const handleTimerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (Number.isNaN(e.target.value)) {
+      setTimer(0);
+      return;
+    }
     setTimer(Number.parseInt(e.target.value));
   };
 
@@ -163,6 +167,7 @@ const QuizForm: React.FC = () => {
             <input
               className="ml-1 w-4 h-4"
               type="checkbox"
+              checked={isMultipleAnswers}
               onChange={e => setIsMultipleAnswers(e.target.checked)}
             />
           </label>
@@ -173,6 +178,7 @@ const QuizForm: React.FC = () => {
             <input
               className="ml-1 w-4 h-4"
               type="checkbox"
+              checked={isAbleToReturn}
               onChange={e => setIsAbleToReturn(e.target.checked)}
             />
           </label>
@@ -184,6 +190,7 @@ const QuizForm: React.FC = () => {
               <input
                 className="ml-1 w-4 h-4 text-blue-600 bg-gray border-gray rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                 type="checkbox"
+                checked={isTimer}
                 onChange={e => setIsTimer(e.target.checked)}
               />
             </label>
@@ -208,6 +215,7 @@ const QuizForm: React.FC = () => {
               <input
                 className="ml-1 w-4 h-4"
                 type="checkbox"
+                checked={isTimerPerQuestion}
                 onChange={e => setIsTimerPerQuestion(e.target.checked)}
               />
             </label>
@@ -262,6 +270,7 @@ const QuizForm: React.FC = () => {
               <input
                 className="w-14 h-14 rounded"
                 type="checkbox"
+                checked={answer.isCorrect}
                 onChange={e => handleCorrectAnswerChange(question.id, answer.id, e.target.checked)}
               />
               {answer.isCorrect && (

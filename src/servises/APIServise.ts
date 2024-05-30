@@ -2,7 +2,8 @@ import { save, get, QUIZZES } from '../localStorage/localStorage';
 import { IQuiz } from '../components/QuizForm/QuizForm';
 
 class APIServise {
-  delay = 1000;
+  private delay = 1000;
+  isLoading = false;
 
   addQuiz(quiz: IQuiz) {
     return new Promise((resolve, reject) => {
@@ -22,6 +23,7 @@ class APIServise {
   }
 
   getAllQuizzes() {
+    this.isLoading = true;
     return new Promise<IQuiz[]>((resolve, reject) => {
       setTimeout(() => {
         const isNull = get(QUIZZES);
@@ -32,6 +34,8 @@ class APIServise {
           resolve(get(QUIZZES));
         }
       }, this.delay);
+    }).finally(() => {
+      this.isLoading = false;
     });
   }
 

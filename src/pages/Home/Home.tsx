@@ -9,7 +9,7 @@ import API from '../../servises/APIServise';
 
 const Home: React.FC = () => {
   const [quizList, setQuizList] = useState<IQuiz[]>([]);
-  const [loader, setLoader] = useState<boolean>(false);
+  const [loader, setLoader] = useState<boolean>(API.isLoading);
 
   const searchContext = useContext(SearchContext);
 
@@ -20,14 +20,14 @@ const Home: React.FC = () => {
   const { searchTerm } = searchContext;
 
   useEffect(() => {
-    setLoader(true);
+    // setLoader(true);
     const getAllQuizzes = async () => {
       try {
         const response = await API.getAllQuizzes();
-        setLoader(false);
+        // setLoader(false);
         setQuizList(response);
       } catch (error) {
-        setLoader(false);
+        // setLoader(false);
         console.log(error);
       }
     };

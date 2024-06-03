@@ -20,6 +20,7 @@ module.exports = {
       'gray-light': '#d3dce6',
       white: '#ffffff',
       red: '#990000',
+      overlay: 'rgba(43, 43, 43, 0.1)',
     },
     fontFamily: {
       sans: ['Graphik', 'sans-serif'],

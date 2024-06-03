@@ -3,6 +3,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import { SearchContext } from '../../components/SearchContext/SearchContext';
 import { IQuiz } from '../../components/QuizForm/QuizForm';
 import Button from '../../components/Button';
+import ModalWrapper from '../../components/ModalWrapper';
+import Modal from '../../components/Modal';
 import Loader from '../../components/Loader';
 
 import API from '../../servises/APIServise';
@@ -10,6 +12,7 @@ import API from '../../servises/APIServise';
 const Home: React.FC = () => {
   const [quizList, setQuizList] = useState<IQuiz[]>([]);
   const [loader, setLoader] = useState<boolean>(API.isLoading);
+  const [openModal, setOpenModal] = useState(false);
 
   const searchContext = useContext(SearchContext);
 
@@ -56,6 +59,8 @@ const Home: React.FC = () => {
       setQuizList(response);
     } catch (error) {
       console.log(error);
+    } finally {
+      setOpenModal(false);
     }
   };
 
@@ -97,10 +102,17 @@ const Home: React.FC = () => {
               <Button
                 imagePosition="beforeText"
                 text="Delete quiz"
-                onClick={() => removeQuizHandler(id)}
+                onClick={() => setOpenModal(true)}
                 className="flex items-center rounded bg-red p-2 text-white font-semibold h-6"
               />
             </div>
+            <ModalWrapper open={openModal} onClose={() => setOpenModal(false)}>
+              <Modal
+                message={`Are you sure you want to delete: ${name}?`}
+                action={() => removeQuizHandler(id)}
+                cancel={() => setOpenModal(false)}
+              />
+            </ModalWrapper>
           </li>
         ))}
       </ul>

@@ -130,6 +130,7 @@ const QuizForm: React.FC = () => {
       setTimer(0);
       return;
     }
+
     setTimer(Number.parseInt(e.target.value));
   };
 

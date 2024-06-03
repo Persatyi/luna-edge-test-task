@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 
-interface IProps {
+interface IButtonProps {
   className?: string;
   type?: 'button' | 'link' | 'submit' | 'reset' | undefined;
   isText?: boolean;
@@ -15,7 +15,7 @@ interface IProps {
   imagePosition?: 'beforeText' | 'afterText';
 }
 
-const Button: React.FC<IProps> = ({
+const Button: React.FC<IButtonProps> = ({
   className,
   type = 'button',
   isText = true,

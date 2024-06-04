@@ -5,14 +5,20 @@ import { IQuiz } from '../../components/QuizForm/QuizForm';
 import Button from '../../components/Button';
 import ModalWrapper from '../../components/ModalWrapper';
 import Modal from '../../components/Modal';
-import Loader from '../../components/Loader';
+// import Loader from '../../components/Loader';
 
 import API from '../../servises/APIServise';
+
+interface IModalData {
+  name: string;
+  id: number;
+}
 
 const Home: React.FC = () => {
   const [quizList, setQuizList] = useState<IQuiz[]>([]);
   const [loader, setLoader] = useState<boolean>(API.isLoading);
-  const [openModal, setOpenModal] = useState(false);
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [modalData, setModalData] = useState<IModalData | null>(null);
 
   const searchContext = useContext(SearchContext);
 
@@ -54,14 +60,21 @@ const Home: React.FC = () => {
   }, [searchTerm]);
 
   const removeQuizHandler = async (id: number) => {
-    try {
-      const response = await API.removeQuiz(id);
-      setQuizList(response);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setOpenModal(false);
+    if (id !== undefined) {
+      try {
+        const response = await API.removeQuiz(id);
+        setQuizList(response);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setOpenModal(false);
+      }
     }
+  };
+
+  const modalHeandler = (id: number, name: string) => {
+    setModalData({ name, id });
+    setOpenModal(true);
   };
 
   if (loader) {
@@ -102,20 +115,20 @@ const Home: React.FC = () => {
               <Button
                 imagePosition="beforeText"
                 text="Delete quiz"
-                onClick={() => setOpenModal(true)}
+                onClick={() => modalHeandler(id, name)}
                 className="flex items-center rounded bg-red p-2 text-white font-semibold h-6"
               />
             </div>
-            <ModalWrapper open={openModal} onClose={() => setOpenModal(false)}>
-              <Modal
-                message={`Are you sure you want to delete: ${name}?`}
-                action={() => removeQuizHandler(id)}
-                cancel={() => setOpenModal(false)}
-              />
-            </ModalWrapper>
           </li>
         ))}
       </ul>
+      <ModalWrapper open={openModal} onClose={() => setOpenModal(false)}>
+        <Modal
+          message={`Are you sure you want to delete: ${modalData?.name}?`}
+          action={() => removeQuizHandler(modalData ? modalData.id : 0)}
+          cancel={() => setOpenModal(false)}
+        />
+      </ModalWrapper>
     </>
   );
 };

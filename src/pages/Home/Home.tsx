@@ -5,7 +5,7 @@ import { IQuiz } from '../../components/QuizForm/QuizForm';
 import Button from '../../components/Button';
 import ModalWrapper from '../../components/ModalWrapper';
 import Modal from '../../components/Modal';
-// import Loader from '../../components/Loader';
+import Loader from '../../components/Loader';
 
 import API from '../../servises/APIServise';
 
@@ -16,7 +16,7 @@ interface IModalData {
 
 const Home: React.FC = () => {
   const [quizList, setQuizList] = useState<IQuiz[]>([]);
-  const [loader, setLoader] = useState<boolean>(API.isLoading);
+  const [loader, setLoader] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [modalData, setModalData] = useState<IModalData | null>(null);
 
@@ -29,15 +29,15 @@ const Home: React.FC = () => {
   const { searchTerm } = searchContext;
 
   useEffect(() => {
-    // setLoader(true);
+    setLoader(true);
     const getAllQuizzes = async () => {
       try {
         const response = await API.getAllQuizzes();
-        // setLoader(false);
         setQuizList(response);
       } catch (error) {
-        // setLoader(false);
         console.log(error);
+      } finally {
+        setLoader(false);
       }
     };
 
@@ -45,14 +45,15 @@ const Home: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    setLoader(true);
     const findQuiz = async () => {
       try {
         const response = await API.findQuiz(searchTerm);
-        setLoader(false);
         setQuizList(response);
       } catch (error) {
-        setLoader(false);
         setQuizList([]);
+      } finally {
+        setLoader(false);
       }
     };
 
@@ -62,12 +63,14 @@ const Home: React.FC = () => {
   const removeQuizHandler = async (id: number) => {
     if (id !== undefined) {
       try {
+        setLoader(true);
         const response = await API.removeQuiz(id);
         setQuizList(response);
       } catch (error) {
         console.log(error);
       } finally {
         setOpenModal(false);
+        setLoader(false);
       }
     }
   };
@@ -78,7 +81,11 @@ const Home: React.FC = () => {
   };
 
   if (loader) {
-    return <p>Loading...</p>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader name="icon-spinner" styles="w-16 h-16 fill-blue" />
+      </div>
+    );
   }
 
   return (

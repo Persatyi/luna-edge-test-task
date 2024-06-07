@@ -8,6 +8,7 @@ import API from '../../servises/APIServise';
 import Stepper from '../../components/Stepper';
 import Button from '../../components/Button';
 import Timer from '../../components/Timer';
+import Loader from '../../components/Loader';
 
 const TakeTheQuiz = () => {
   const { id } = useParams<{ id: string }>();
@@ -95,7 +96,11 @@ const TakeTheQuiz = () => {
   };
 
   if (!quiz) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader name="icon-spinner" styles="w-16 h-16 fill-blue" />
+      </div>
+    );
   }
 
   const currentQuestion = quiz.questions[currentQuestionIndex];

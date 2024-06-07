@@ -4,6 +4,8 @@ import API from '../../servises/APIServise';
 
 import { IQuiz } from '../../components/QuizForm/QuizForm';
 
+import Loader from '../../components/Loader';
+
 import spriteSvg from '../../assets/images/sprite/sprite.svg';
 
 const Results = () => {
@@ -73,7 +75,11 @@ const Results = () => {
   };
 
   if (!quiz) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader name="icon-spinner" styles="w-16 h-16 fill-blue" />
+      </div>
+    );
   }
 
   return (

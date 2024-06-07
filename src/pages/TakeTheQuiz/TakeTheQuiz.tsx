@@ -20,8 +20,12 @@ const TakeTheQuiz = () => {
   const [key, setKey] = useState(0);
 
   useEffect(() => {
+    if (quiz?.isTimer) {
+      return;
+    }
+
     setKey(prevKey => prevKey + 1); // Increment key to reset timer
-  }, [currentQuestionIndex]);
+  }, [currentQuestionIndex, quiz]);
 
   useEffect(() => {
     const getQuiz = async () => {

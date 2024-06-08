@@ -8,7 +8,7 @@ import CreateQuiz from './pages/CreateQuiz';
 import TakeTheQuiz from './pages/TakeTheQuiz';
 import Results from './pages/Results';
 import EditQuiz from './pages/EditQuiz';
-import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
   return (

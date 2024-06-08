@@ -20,7 +20,7 @@ const TakeTheQuiz = () => {
   const [key, setKey] = useState(0);
 
   useEffect(() => {
-    if (quiz?.isTimer) {
+    if (quiz?.isTimer || (!quiz?.isTimer && !quiz?.isTimerPerQuestion)) {
       return;
     }
 

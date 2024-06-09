@@ -93,7 +93,7 @@ const EditQuiz = () => {
 
   const setIsTimerPerQuestion = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (quiz) {
-      setQuiz({ ...quiz, isTimerPerQuestion: e.target.checked });
+      setQuiz({ ...quiz, isTimerPerQuestion: e.target.checked, isAbleToReturn: false });
     }
   };
 

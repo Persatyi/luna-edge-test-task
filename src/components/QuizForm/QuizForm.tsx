@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 
-import APIServise from '../../servises/APIServise';
+import API from '../../servises/APIServise';
 
 import Button from '../Button';
 import spriteSvg from '../../assets/images/sprite/sprite.svg';
@@ -130,6 +129,11 @@ const QuizForm: React.FC = () => {
     setIsTimerPerQuestion(false);
   };
 
+  const handleTimerPerQuestion = (checked: boolean) => {
+    setIsTimerPerQuestion(checked);
+    setIsAbleToReturn(false);
+  };
+
   const handleTimerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (Number.isNaN(e.target.value)) {
       setTimer(0);
@@ -144,7 +148,7 @@ const QuizForm: React.FC = () => {
     setQuestions([]);
     const quizTimer = isTimer ? timer : 0;
     const questionTimer = isTimerPerQuestion ? timer : 0;
-    APIServise.addQuiz({
+    API.addQuiz({
       name: quizName,
       id: Date.now(),
       questions,
@@ -160,12 +164,18 @@ const QuizForm: React.FC = () => {
   return (
     <section className="pt-5 pb-5">
       <div className="mb-3 gap-2">
-        <Link className="flex items-center gap-2 text-white rounded p-3 w-40 h-6 bg-gray" to="/">
-          <svg style={{ width: '15px', height: '15px', fill: '#ffffff' }}>
-            <use href={`${spriteSvg}#icon-home`}></use>
-          </svg>
-          To homepage
-        </Link>
+        <Button
+          type="link"
+          text="To homepage"
+          to="/"
+          image={
+            <svg style={{ width: '15px', height: '15px', fill: '#ffffff' }}>
+              <use href={`${spriteSvg}#icon-home`}></use>
+            </svg>
+          }
+          imagePosition="beforeText"
+          className="flex items-center gap-2 text-white rounded p-3 w-40 h-6 bg-gray"
+        />
         <h1 className="text-2xl text-center font-bold mb-4">Quiz Constructor</h1>
         <div className="flex items-center">
           <label className="font-bold flex items-center">
@@ -224,7 +234,7 @@ const QuizForm: React.FC = () => {
                 className="ml-1 w-4 h-4"
                 type="checkbox"
                 checked={isTimerPerQuestion}
-                onChange={e => setIsTimerPerQuestion(e.target.checked)}
+                onChange={e => handleTimerPerQuestion(e.target.checked)}
               />
             </label>
             {isTimerPerQuestion && (

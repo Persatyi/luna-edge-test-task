@@ -184,6 +184,7 @@ const QuizForm: React.FC = () => {
             <input
               className="ml-1 w-4 h-4"
               type="checkbox"
+              disabled={isTimerPerQuestion ? true : false}
               checked={isAbleToReturn}
               onChange={e => handleAbilityToReturn(e.target.checked)}
             />

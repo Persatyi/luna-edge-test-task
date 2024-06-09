@@ -210,6 +210,7 @@ const EditQuiz = () => {
             type="checkbox"
             onChange={e => handleAbleToReturn(e)}
             checked={quiz?.isAbleToReturn}
+            disabled={quiz?.isTimerPerQuestion ? true : false}
           />
         </label>
       </div>

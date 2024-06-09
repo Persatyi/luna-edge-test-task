@@ -125,6 +125,11 @@ const QuizForm: React.FC = () => {
     );
   };
 
+  const handleAbilityToReturn = (checked: boolean) => {
+    setIsAbleToReturn(checked);
+    setIsTimerPerQuestion(false);
+  };
+
   const handleTimerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (Number.isNaN(e.target.value)) {
       setTimer(0);
@@ -180,7 +185,7 @@ const QuizForm: React.FC = () => {
               className="ml-1 w-4 h-4"
               type="checkbox"
               checked={isAbleToReturn}
-              onChange={e => setIsAbleToReturn(e.target.checked)}
+              onChange={e => handleAbilityToReturn(e.target.checked)}
             />
           </label>
         </div>
@@ -203,7 +208,7 @@ const QuizForm: React.FC = () => {
                   placeholder="Seconds"
                   value={timer}
                   onChange={e => handleTimerChange(e)}
-                  className="ml-2 w-32 h-5  p-2 border border-gray rounded font-normal"
+                  className="ml-2 w-32 h-5 p-2 border border-gray rounded font-normal"
                 />
               </label>
             )}
@@ -214,6 +219,7 @@ const QuizForm: React.FC = () => {
             <label className="font-bold flex items-center">
               Timer per question:
               <input
+                disabled={isAbleToReturn ? true : false}
                 className="ml-1 w-4 h-4"
                 type="checkbox"
                 checked={isTimerPerQuestion}

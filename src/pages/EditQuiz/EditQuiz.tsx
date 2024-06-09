@@ -75,7 +75,7 @@ const EditQuiz = () => {
 
   const handleAbleToReturn = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (quiz) {
-      setQuiz({ ...quiz, isAbleToReturn: e.target.checked });
+      setQuiz({ ...quiz, isAbleToReturn: e.target.checked, isTimerPerQuestion: false });
     }
   };
 
@@ -245,6 +245,8 @@ const EditQuiz = () => {
             <input
               className="ml-1 w-4 h-4"
               type="checkbox"
+              checked={quiz?.isTimerPerQuestion}
+              disabled={quiz?.isAbleToReturn ? true : false}
               onChange={e => setIsTimerPerQuestion(e)}
             />
           </label>

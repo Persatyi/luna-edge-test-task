@@ -21,6 +21,7 @@ const QuizOption: React.FC<IQuizOption> = ({
   onChange,
   value,
   placeholder,
+  disabled,
 }) => {
   return (
     <label className={labelClassName}>
@@ -32,6 +33,7 @@ const QuizOption: React.FC<IQuizOption> = ({
         onChange={e => onChange(e)}
         checked={checked}
         value={value}
+        disabled={disabled}
       />
     </label>
   );

@@ -164,7 +164,7 @@ const QuizForm: React.FC = () => {
   };
 
   return (
-    <section className="pt-5 pb-5">
+    <>
       <div className="mb-3 gap-2">
         <Button
           type="link"
@@ -193,7 +193,7 @@ const QuizForm: React.FC = () => {
           <QuizOption
             text="Return to previous question: "
             type="checkbox"
-            disabled={isAbleToReturn ? true : false}
+            disabled={isTimerPerQuestion ? true : false}
             checked={isAbleToReturn}
             onChange={e => handleAbilityToReturn(e.target.checked)}
             labelClassName="font-bold flex items-center"
@@ -287,7 +287,7 @@ const QuizForm: React.FC = () => {
           />
         )}
       </div>
-    </section>
+    </>
   );
 };
 

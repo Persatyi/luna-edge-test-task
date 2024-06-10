@@ -4,6 +4,7 @@ import API from '../../servises/APIServise';
 
 import Button from '../Button';
 import QuizQuestion from './QuizQuestion';
+import QuizOption from './QuizOption';
 import spriteSvg from '../../assets/images/sprite/sprite.svg';
 
 export interface IAnswerOption {
@@ -179,76 +180,70 @@ const QuizForm: React.FC = () => {
         />
         <h1 className="text-2xl text-center font-bold mb-4">Quiz Constructor</h1>
         <div className="flex items-center">
-          <label className="font-bold flex items-center">
-            Multiple answers:
-            <input
-              className="ml-1 w-4 h-4"
-              type="checkbox"
-              checked={isMultipleAnswers}
-              onChange={e => setIsMultipleAnswers(e.target.checked)}
-            />
-          </label>
+          <QuizOption
+            text=" Multiple answers: "
+            type="checkbox"
+            checked={isMultipleAnswers}
+            onChange={e => setIsMultipleAnswers(e.target.checked)}
+            labelClassName="font-bold flex items-center"
+            inputClassName="ml-1 w-4 h-4"
+          />
         </div>
         <div className="flex items-center">
-          <label className="font-bold flex items-center">
-            Return to previous question:
-            <input
-              className="ml-1 w-4 h-4"
-              type="checkbox"
-              disabled={isTimerPerQuestion ? true : false}
-              checked={isAbleToReturn}
-              onChange={e => handleAbilityToReturn(e.target.checked)}
-            />
-          </label>
+          <QuizOption
+            text="Return to previous question: "
+            type="checkbox"
+            disabled={isAbleToReturn ? true : false}
+            checked={isAbleToReturn}
+            onChange={e => handleAbilityToReturn(e.target.checked)}
+            labelClassName="font-bold flex items-center"
+            inputClassName="ml-1 w-4 h-4"
+          />
         </div>
         {!isTimerPerQuestion && (
           <div className="flex items-center">
-            <label className="font-bold flex items-center">
-              Timer:
-              <input
-                className="ml-1 w-4 h-4 text-blue-600 bg-gray border-gray rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                type="checkbox"
-                checked={isTimer}
-                onChange={e => setIsTimer(e.target.checked)}
-              />
-            </label>
+            <QuizOption
+              text="Timer: "
+              type="checkbox"
+              checked={isTimer}
+              onChange={e => setIsTimer(e.target.checked)}
+              labelClassName="font-bold flex items-center"
+              inputClassName="ml-1 w-4 h-4"
+            />
             {isTimer && (
-              <label className="ml-4 font-bold flex items-center">
-                Type amount of seconds:
-                <input
-                  type="number"
-                  placeholder="Seconds"
-                  value={timer}
-                  onChange={e => handleTimerChange(e)}
-                  className="ml-2 w-32 h-5 p-2 border border-gray rounded font-normal"
-                />
-              </label>
+              <QuizOption
+                text="Type amount of seconds: "
+                type="number"
+                value={timer}
+                placeholder="Seconds"
+                onChange={e => handleTimerChange(e)}
+                labelClassName="ml-4 font-bold flex items-center"
+                inputClassName="ml-2 w-32 h-5 p-2 border border-gray rounded font-normal"
+              />
             )}
           </div>
         )}
         {!isTimer && (
           <div className="flex items-center">
-            <label className="font-bold flex items-center">
-              Timer per question:
-              <input
-                disabled={isAbleToReturn ? true : false}
-                className="ml-1 w-4 h-4"
-                type="checkbox"
-                checked={isTimerPerQuestion}
-                onChange={e => handleTimerPerQuestion(e.target.checked)}
-              />
-            </label>
+            <QuizOption
+              labelClassName="font-bold flex items-center"
+              inputClassName="ml-1 w-4 h-4"
+              text="Timer per question: "
+              type="checkbox"
+              disabled={isAbleToReturn ? true : false}
+              checked={isTimerPerQuestion}
+              onChange={e => handleTimerPerQuestion(e.target.checked)}
+            />
             {isTimerPerQuestion && (
-              <label className="ml-4 font-bold flex items-center">
-                Type amount of seconds:
-                <input
-                  type="number"
-                  placeholder="Seconds"
-                  value={timer}
-                  onChange={e => handleTimerChange(e)}
-                  className="ml-2 w-32 h-5  p-2 border border-gray rounded font-normal"
-                />
-              </label>
+              <QuizOption
+                labelClassName="ml-4 font-bold flex items-center"
+                inputClassName="ml-2 w-32 h-5  p-2 border border-gray rounded font-normal"
+                text="Type amount of seconds: "
+                type="number"
+                placeholder="Seconds"
+                value={timer}
+                onChange={e => handleTimerChange(e)}
+              />
             )}
           </div>
         )}

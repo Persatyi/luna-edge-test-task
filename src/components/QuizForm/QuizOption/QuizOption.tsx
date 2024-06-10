@@ -4,7 +4,7 @@ interface IQuizOption {
   text: string;
   labelClassName?: string;
   inputClassName?: string;
-  type: 'checkbox' | 'radio' | 'number';
+  type: 'checkbox' | 'radio' | 'number' | 'text';
   value?: string | number;
   placeholder?: string;
   checked?: boolean;

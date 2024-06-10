@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import API from '../../servises/APIServise';
 
 import { IQuiz, IQuestion, IAnswerOption } from '../../components/QuizForm/QuizForm';
 import Button from '../../components/Button';
+import { QuizOption, QuizQuestion } from '../../components/QuizForm';
 
 import spriteSvg from '../../assets/images/sprite/sprite.svg';
 
@@ -47,22 +48,26 @@ const EditQuiz = () => {
     setQuiz(prevQuiz => (prevQuiz ? { ...prevQuiz, name: e.target.value } : null));
   };
 
-  const handleQuestionChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleQuestionChange = (questionId: number, text: string) => {
     if (quiz) {
-      const updatedQuestions = [...quiz.questions];
-      updatedQuestions[index].text = e.target.value;
+      const updatedQuestions = quiz.questions.map(q => (q.id === questionId ? { ...q, text } : q));
       setQuiz({ ...quiz, questions: updatedQuestions });
     }
   };
 
-  const handleAnswerChange = (
-    questionIndex: number,
-    answerIndex: number,
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleAnswerChange = (questionId: number, answerId: number, text: string) => {
     if (quiz) {
-      const updatedQuestions = [...quiz.questions];
-      updatedQuestions[questionIndex].answers[answerIndex].text = e.target.value;
+      const updatedQuestions = [...quiz.questions].map(q => {
+        if (q.id === questionId) {
+          return {
+            ...q,
+            answers: q.answers.map(answer =>
+              answer.id === answerId ? { ...answer, text } : answer,
+            ),
+          };
+        }
+        return q;
+      });
       setQuiz({ ...quiz, questions: updatedQuestions });
     }
   };
@@ -114,14 +119,14 @@ const EditQuiz = () => {
     }
   };
 
-  const handleRemoveQuestion = (index: number) => {
+  const handleRemoveQuestion = (questionId: number) => {
     if (quiz) {
-      const updatedQuestions = quiz.questions.filter((_, i) => i !== index);
+      const updatedQuestions = quiz.questions.filter(q => q.id !== questionId);
       setQuiz({ ...quiz, questions: updatedQuestions });
     }
   };
 
-  const handleAddAnswer = (questionIndex: number) => {
+  const handleAddAnswer = (questionId: number) => {
     if (quiz) {
       const newAnswer: IAnswerOption = {
         id: Date.now(),
@@ -129,18 +134,32 @@ const EditQuiz = () => {
         isCorrect: false,
         points: 0,
       };
-      const updatedQuestions = [...quiz.questions];
-      updatedQuestions[questionIndex].answers.push(newAnswer);
+
+      const updatedQuestions = quiz.questions.map(q => {
+        if (q.id === questionId) {
+          return {
+            ...q,
+            answers: [...q.answers, newAnswer],
+          };
+        }
+        return q;
+      });
       setQuiz({ ...quiz, questions: updatedQuestions });
     }
   };
 
-  const handleRemoveAnswer = (questionIndex: number, answerIndex: number) => {
+  const handleRemoveAnswer = (questionId: number, answerId: number) => {
     if (quiz) {
-      const updatedQuestions = [...quiz.questions];
-      updatedQuestions[questionIndex].answers = updatedQuestions[questionIndex].answers.filter(
-        (_, i) => i !== answerIndex,
-      );
+      const updatedQuestions = [...quiz.questions].map(q => {
+        if (q.id === questionId) {
+          return {
+            ...q,
+            answers: [...q.answers].filter(a => a.id !== answerId),
+          };
+        }
+        return q;
+      });
+
       setQuiz({ ...quiz, questions: updatedQuestions });
     }
   };
@@ -183,167 +202,109 @@ const EditQuiz = () => {
 
   return (
     <>
-      <Link className="flex items-center gap-2 text-white rounded p-3 w-40 h-6 bg-gray" to="/">
-        <svg style={{ width: '15px', height: '15px', fill: '#ffffff' }}>
-          <use href={`${spriteSvg}#icon-home`}></use>
-        </svg>
-        To homepage
-      </Link>
+      <Button
+        type="link"
+        className="flex items-center gap-2 text-white rounded p-3 w-40 h-6 bg-gray"
+        to="/"
+        text="To homepage"
+        image={
+          <svg style={{ width: '15px', height: '15px', fill: '#ffffff' }}>
+            <use href={`${spriteSvg}#icon-home`}></use>
+          </svg>
+        }
+        imagePosition="beforeText"
+      />
       <h1 className="text-2xl text-center font-bold mb-4">Edit Quiz</h1>
-
       <div className="flex items-center">
-        <label className="font-bold flex items-center">
-          Multiple answers:
-          <input
-            className="ml-1 w-4 h-4"
-            type="checkbox"
-            onChange={e => handleMultipleAnswers(e)}
-            checked={quiz?.isMultipleAnswers}
-          />
-        </label>
+        <QuizOption
+          inputClassName="ml-1 w-4 h-4"
+          labelClassName="font-bold flex items-center"
+          text="Multiple answers: "
+          type="checkbox"
+          onChange={e => handleMultipleAnswers(e)}
+          checked={quiz?.isMultipleAnswers ? quiz.isMultipleAnswers : false}
+        />
       </div>
       <div className="flex items-center">
-        <label className="font-bold flex items-center">
-          Return to previous question:
-          <input
-            className="ml-1 w-4 h-4"
-            type="checkbox"
-            onChange={e => handleAbleToReturn(e)}
-            checked={quiz?.isAbleToReturn}
-            disabled={quiz?.isTimerPerQuestion ? true : false}
-          />
-        </label>
+        <QuizOption
+          labelClassName="font-bold flex items-center"
+          inputClassName="ml-1 w-4 h-4"
+          text="Return to previous question: "
+          type="checkbox"
+          onChange={e => handleAbleToReturn(e)}
+          checked={quiz?.isAbleToReturn ? quiz.isAbleToReturn : false}
+          disabled={quiz?.isTimerPerQuestion ? true : false}
+        />
       </div>
       {!quiz?.isTimerPerQuestion && (
         <div className="flex items-center">
-          <label className="font-bold flex items-center">
-            Timer:
-            <input
-              className="ml-1 w-4 h-4 text-blue-600 bg-gray border-gray rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-              type="checkbox"
-              onChange={e => handleIsTimer(e)}
-              checked={quiz?.isTimer}
-            />
-          </label>
+          <QuizOption
+            inputClassName="ml-1 w-4 h-4"
+            labelClassName="font-bold flex items-center"
+            text="Timer: "
+            type="checkbox"
+            onChange={e => handleIsTimer(e)}
+            checked={quiz?.isTimer ? quiz.isTimer : false}
+          />
           {quiz?.isTimer && (
-            <label className="ml-4 font-bold flex items-center">
-              Type amount of seconds:
-              <input
-                type="number"
-                placeholder="Seconds"
-                value={quiz.quizDuration}
-                onChange={e => handleTimerChange(e)}
-                className="ml-2 w-32 h-5  p-2 border border-gray rounded font-normal"
-              />
-            </label>
+            <QuizOption
+              type="number"
+              placeholder="Seconds"
+              value={!!quiz.quizDuration ? quiz.quizDuration : undefined}
+              onChange={e => handleTimerChange(e)}
+              text="Type amount of seconds: "
+              inputClassName="ml-2 w-32 h-5  p-2 border border-gray rounded font-normal"
+              labelClassName="ml-4 font-bold flex items-center"
+            />
           )}
         </div>
       )}
       {!quiz?.isTimer && (
         <div className="flex items-center">
-          <label className="font-bold flex items-center">
-            Timer per question:
-            <input
-              className="ml-1 w-4 h-4"
-              type="checkbox"
-              checked={quiz?.isTimerPerQuestion}
-              disabled={quiz?.isAbleToReturn ? true : false}
-              onChange={e => setIsTimerPerQuestion(e)}
-            />
-          </label>
+          <QuizOption
+            text="Timer per question: "
+            inputClassName="ml-1 w-4 h-4"
+            labelClassName="font-bold flex items-center"
+            type="checkbox"
+            checked={quiz?.isTimerPerQuestion ? quiz.isTimerPerQuestion : false}
+            disabled={quiz?.isAbleToReturn ? true : false}
+            onChange={e => setIsTimerPerQuestion(e)}
+          />
           {quiz?.isTimerPerQuestion && (
-            <label className="ml-4 font-bold flex items-center">
-              Type amount of seconds:
-              <input
-                type="number"
-                placeholder="Seconds"
-                value={quiz.questionDuration}
-                onChange={e => handleTimerChangePerQuestion(e)}
-                className="ml-2 w-32 h-5  p-2 border border-gray rounded font-normal"
-              />
-            </label>
+            <QuizOption
+              labelClassName="ml-4 font-bold flex items-center"
+              inputClassName="ml-2 w-32 h-5 p-2 border border-gray rounded font-normal"
+              text="Type amount of seconds: "
+              type="number"
+              placeholder="Seconds"
+              value={!!quiz.questionDuration ? quiz.questionDuration : undefined}
+              onChange={e => handleTimerChangePerQuestion(e)}
+            />
           )}
         </div>
       )}
       <div className="mb-4">
-        <label className="block text-sm font-bold ">Quiz Name</label>
-        <input
+        <QuizOption
+          inputClassName="w-full p-2 mb-2 border border-gray rounded"
+          labelClassName="block text-sm font-bold"
+          text="Quiz Name"
           type="text"
-          value={quiz?.name}
+          value={!!quiz?.name ? quiz.name : ''}
           onChange={handleNameChange}
-          className="w-full p-2 mb-2 border border-gray rounded"
         />
       </div>
       {quiz?.questions.map((question, qIndex) => (
-        <div key={question.id} className="mb-6 border-gray bg-gray-light border-2 rounded p-2">
-          <div className="flex mb-3">
-            <p className="font-bold">Question {qIndex + 1}</p>
-            <Button
-              isText={false}
-              onClick={() => handleRemoveQuestion(qIndex)}
-              className="ml-auto bg-red text-white p-2 rounded"
-              imagePosition="beforeText"
-              image={
-                <svg style={{ width: '12px', height: '12px', fill: '#ffffff' }}>
-                  <use href={`${spriteSvg}#icon-cross`}></use>
-                </svg>
-              }
-            />
-          </div>
-          <input
-            type="text"
-            value={question.text}
-            onChange={e => handleQuestionChange(qIndex, e)}
-            className="w-full p-2 mb-2 border border-gray rounded"
-          />
-          <div className="mt-4 space-y-2">
-            {question.answers.map((answer, aIndex) => (
-              <div key={answer.id} className="flex items-center mb-2 gap-1">
-                <input
-                  className="w-14 h-14 rounded"
-                  type="checkbox"
-                  checked={answer.isCorrect}
-                  onChange={e =>
-                    handleCorrectAnswerChange(question.id, answer.id, e.target.checked)
-                  }
-                />
-                {answer.isCorrect && (
-                  <input
-                    type="number"
-                    step="0.1"
-                    placeholder="Points"
-                    value={answer.points}
-                    onChange={e =>
-                      handleCorrectAnswerChange(
-                        question.id,
-                        answer.id,
-                        answer.isCorrect,
-                        parseFloat(e.target.value),
-                      )
-                    }
-                    className="w-24 p-2 border border-gray rounded"
-                  />
-                )}
-                <input
-                  type="text"
-                  value={answer.text}
-                  onChange={e => handleAnswerChange(qIndex, aIndex, e)}
-                  className="w-full p-2 border border-gray rounded"
-                />
-                <Button
-                  text="Remove"
-                  onClick={() => handleRemoveAnswer(qIndex, aIndex)}
-                  className="bg-red text-xs text-white px-4 py-2 h-6 w-18 rounded"
-                />
-              </div>
-            ))}
-            <Button
-              text="Add answer"
-              onClick={() => handleAddAnswer(qIndex)}
-              className="bg-blue text-white px-4 py-2 rounded"
-            />
-          </div>
-        </div>
+        <QuizQuestion
+          key={question.id}
+          question={question}
+          index={qIndex}
+          removeQuestion={handleRemoveQuestion}
+          handleQuestionChange={handleQuestionChange}
+          handleCorrectAnswerChange={handleCorrectAnswerChange}
+          handleAnswerChange={handleAnswerChange}
+          removeAnswerOption={handleRemoveAnswer}
+          addAnswerOption={handleAddAnswer}
+        />
       ))}
       <div className="flex gap-2">
         <Button

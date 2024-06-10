@@ -3,6 +3,7 @@ import React from 'react';
 import { IQuestion } from '../QuizForm';
 
 import Button from '../../Button';
+import QuizAnswer from '../QuizAnswer';
 
 import spriteSvg from '../../../assets/images/sprite/sprite.svg';
 
@@ -56,44 +57,14 @@ const QuizQuestion: React.FC<IQuizQuestion> = ({
         className="w-full p-2 mb-2 border border-gray rounded"
       />
       {question.answers.map(answer => (
-        <div key={answer.id} className="flex items-center mb-2 gap-1 ">
-          <input
-            className="w-14 h-14 rounded"
-            type="checkbox"
-            checked={answer.isCorrect}
-            onChange={e => handleCorrectAnswerChange(question.id, answer.id, e.target.checked)}
-          />
-          {answer.isCorrect && (
-            <input
-              type="number"
-              step="0.1"
-              placeholder="Points"
-              value={answer.points}
-              onChange={e =>
-                handleCorrectAnswerChange(
-                  question.id,
-                  answer.id,
-                  answer.isCorrect,
-                  parseFloat(e.target.value),
-                )
-              }
-              className="w-24 p-2 border border-gray rounded"
-            />
-          )}
-
-          <input
-            type="text"
-            placeholder="Enter answer"
-            value={answer.text}
-            onChange={e => handleAnswerChange(question.id, answer.id, e.target.value)}
-            className="w-full p-2 border border-gray rounded"
-          />
-          <Button
-            text="Remove"
-            onClick={() => removeAnswerOption(question.id, answer.id)}
-            className="bg-red text-xs text-white px-4 py-2 h-6 w-18 rounded"
-          />
-        </div>
+        <QuizAnswer
+          key={answer.id}
+          answer={answer}
+          questionId={question.id}
+          handleCorrectAnswerChange={handleCorrectAnswerChange}
+          handleAnswerChange={handleAnswerChange}
+          removeAnswerOption={removeAnswerOption}
+        />
       ))}
       <Button
         text="Add answer"

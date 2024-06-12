@@ -3,15 +3,15 @@ import React, { useEffect, useState } from 'react';
 interface ITimerProps {
   duration: number;
   onTimeUp: () => void;
-  key: number;
+  updater: number;
 }
 
-const Timer: React.FC<ITimerProps> = ({ duration, onTimeUp, key }) => {
+const Timer: React.FC<ITimerProps> = ({ duration, onTimeUp, updater }) => {
   const [timeLeft, setTimeLeft] = useState(duration);
 
   useEffect(() => {
     setTimeLeft(duration);
-  }, [duration, key]);
+  }, [duration, updater]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -26,7 +26,7 @@ const Timer: React.FC<ITimerProps> = ({ duration, onTimeUp, key }) => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [onTimeUp, key]);
+  }, [onTimeUp, updater]);
 
   return (
     <div>

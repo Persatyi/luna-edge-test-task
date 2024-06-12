@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useLocation, Link } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import API from '../../servises/APIServise';
 
 import { IQuiz } from '../../components/QuizForm/QuizForm';
 
+import Button from '../../components/Button';
 import Loader from '../../components/Loader';
 
 import spriteSvg from '../../assets/images/sprite/sprite.svg';
 
-const Results = () => {
+const Results: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
   const location = useLocation();
   const [quiz, setQuiz] = useState<IQuiz | null>(null);
@@ -84,12 +85,18 @@ const Results = () => {
 
   return (
     <div>
-      <Link className="flex items-center gap-2 text-white rounded p-3 w-40 h-6 bg-gray" to="/">
-        <svg style={{ width: '15px', height: '15px', fill: '#ffffff' }}>
-          <use href={`${spriteSvg}#icon-home`}></use>
-        </svg>
-        To homepage
-      </Link>
+      <Button
+        type="link"
+        text="To homepage"
+        to="/"
+        image={
+          <svg style={{ width: '15px', height: '15px', fill: '#ffffff' }}>
+            <use href={`${spriteSvg}#icon-home`}></use>
+          </svg>
+        }
+        imagePosition="beforeText"
+        className="flex items-center gap-2 text-white rounded p-3 w-40 h-6 bg-gray"
+      />
       <h1 className="text-2xl text-center font-bold mb-4">{quiz && quiz.name} - results</h1>
       <p className="font-bold flex items-center">Correct answers: {correctAnswersCount}</p>
       <p className="font-bold flex items-center">Incorrect answers: {incorrectAnswersCount}</p>

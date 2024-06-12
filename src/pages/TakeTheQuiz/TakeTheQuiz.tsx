@@ -115,7 +115,7 @@ const TakeTheQuiz = () => {
       <div>
         <h1 className="text-2xl text-center font-bold mb-4">{quiz.name}</h1>
         {quiz.isTimer && (
-          <Timer duration={quiz.quizDuration} onTimeUp={handleFinishQuiz} key={key} />
+          <Timer duration={quiz.quizDuration} onTimeUp={handleFinishQuiz} updater={key} />
         )}
         {quiz.isTimerPerQuestion && (
           <Timer
@@ -125,7 +125,7 @@ const TakeTheQuiz = () => {
                 ? handleFinishQuiz
                 : handleNextQuestion
             }
-            key={key}
+            updater={key}
           />
         )}
         <div>

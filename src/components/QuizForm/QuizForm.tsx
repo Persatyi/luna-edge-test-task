@@ -115,6 +115,10 @@ const QuizForm: React.FC = () => {
     updateLocalStorage('quizName', quizName);
   }, [quizName, updateLocalStorage]);
 
+  useEffect(() => {
+    updateLocalStorage('questions', questions);
+  }, [questions, updateLocalStorage]);
+
   const addQuestion = () => {
     setQuestions([
       ...questions,
@@ -236,6 +240,10 @@ const QuizForm: React.FC = () => {
     });
   };
 
+  const handleReturnToMain = () => {
+    save(NEW_QUIZ, null);
+  };
+
   return (
     <>
       <div className="mb-3 gap-2">
@@ -250,6 +258,7 @@ const QuizForm: React.FC = () => {
           }
           imagePosition="beforeText"
           className="flex items-center gap-2 text-white rounded p-3 w-40 h-6 bg-gray"
+          onClick={handleReturnToMain}
         />
         <h1 className="text-2xl text-center font-bold mb-4">Quiz Constructor</h1>
         <div className="flex items-center">

@@ -8,6 +8,16 @@ import QuizQuestion from './QuizQuestion';
 import QuizOption from './QuizOption';
 import spriteSvg from '../../assets/images/sprite/sprite.svg';
 
+enum QuizFields {
+  QuizName = 'quizName',
+  IsMultipleAnswers = 'isMultipleAnswers',
+  IsAbleToReturn = 'isAbleToReturn',
+  IsTimer = 'isTimer',
+  IsTimerPerQuestion = 'isTimerPerQuestion',
+  Timer = 'timer',
+  Questions = 'questions',
+}
+
 export interface IAnswerOption {
   id: number;
   text: string;
@@ -65,7 +75,7 @@ const QuizForm: React.FC = () => {
   });
 
   const updateLocalStorage = useCallback(
-    (name: string, data: any) => {
+    (name: QuizFields, data: any) => {
       const initialData = {
         ...savedQuiz,
         isMultipleAnswers,
@@ -92,31 +102,31 @@ const QuizForm: React.FC = () => {
   );
 
   useEffect(() => {
-    updateLocalStorage('isMultipleAnswers', isMultipleAnswers);
+    updateLocalStorage(QuizFields.IsMultipleAnswers, isMultipleAnswers);
   }, [isMultipleAnswers, updateLocalStorage]);
 
   useEffect(() => {
-    updateLocalStorage('isAbleToReturn', isAbleToReturn);
+    updateLocalStorage(QuizFields.IsAbleToReturn, isAbleToReturn);
   }, [isAbleToReturn, updateLocalStorage]);
 
   useEffect(() => {
-    updateLocalStorage('isTimer', isTimer);
+    updateLocalStorage(QuizFields.IsTimer, isTimer);
   }, [isTimer, updateLocalStorage]);
 
   useEffect(() => {
-    updateLocalStorage('timer', timer);
+    updateLocalStorage(QuizFields.Timer, timer);
   }, [timer, updateLocalStorage]);
 
   useEffect(() => {
-    updateLocalStorage('isTimerPerQuestion', isTimerPerQuestion);
+    updateLocalStorage(QuizFields.IsTimerPerQuestion, isTimerPerQuestion);
   }, [isTimerPerQuestion, updateLocalStorage]);
 
   useEffect(() => {
-    updateLocalStorage('quizName', quizName);
+    updateLocalStorage(QuizFields.QuizName, quizName);
   }, [quizName, updateLocalStorage]);
 
   useEffect(() => {
-    updateLocalStorage('questions', questions);
+    updateLocalStorage(QuizFields.Questions, questions);
   }, [questions, updateLocalStorage]);
 
   const addQuestion = () => {

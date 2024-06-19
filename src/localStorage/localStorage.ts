@@ -8,7 +8,7 @@ const save = (key: string, value: any) => {
 
 const get = (key: string) => {
   try {
-    return JSON.parse(localStorage.getItem(key) || "");
+    return JSON.parse(localStorage.getItem(key) || '');
   } catch (error) {
     return null;
   }
@@ -22,6 +22,7 @@ const remove = (key: string) => {
   }
 };
 
-const QUIZZES = "quizzes";
+const QUIZZES = 'quizzes';
+const NEW_QUIZ = 'newQuiz';
 
-export { get, save, remove, QUIZZES };
+export { get, save, remove, QUIZZES, NEW_QUIZ };

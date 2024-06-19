@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 
 import API from '../../servises/APIServise';
+import { get, save, NEW_QUIZ } from '../../localStorage/localStorage';
 
 import Button from '../Button';
 import QuizQuestion from './QuizQuestion';
@@ -33,14 +34,86 @@ export interface IQuiz {
 }
 
 const QuizForm: React.FC = () => {
-  const [quizName, setQuizName] = useState<string>('');
-  const [questions, setQuestions] = useState<IQuestion[]>([]);
+  const savedQuiz = get(NEW_QUIZ);
 
-  const [isMultipleAnswers, setIsMultipleAnswers] = useState<boolean>(false);
-  const [isAbleToReturn, setIsAbleToReturn] = useState<boolean>(false);
-  const [isTimer, setIsTimer] = useState<boolean>(false);
-  const [isTimerPerQuestion, setIsTimerPerQuestion] = useState<boolean>(false);
-  const [timer, setTimer] = useState<number>(0);
+  const [quizName, setQuizName] = useState<string>(() => {
+    return savedQuiz !== null ? savedQuiz.quizName : '';
+  });
+
+  const [isMultipleAnswers, setIsMultipleAnswers] = useState<boolean>(() => {
+    return savedQuiz !== null ? savedQuiz.isMultipleAnswers : false;
+  });
+
+  const [isAbleToReturn, setIsAbleToReturn] = useState<boolean>(() => {
+    return savedQuiz !== null ? savedQuiz.isAbleToReturn : false;
+  });
+
+  const [isTimer, setIsTimer] = useState<boolean>(() => {
+    return savedQuiz !== null ? savedQuiz.isTimer : false;
+  });
+
+  const [isTimerPerQuestion, setIsTimerPerQuestion] = useState<boolean>(() => {
+    return savedQuiz !== null ? savedQuiz.isTimerPerQuestion : false;
+  });
+
+  const [timer, setTimer] = useState<number>(() => {
+    return savedQuiz !== null ? savedQuiz.timer : 0;
+  });
+
+  const [questions, setQuestions] = useState<IQuestion[]>(() => {
+    return savedQuiz !== null ? savedQuiz.questions : [];
+  });
+
+  const updateLocalStorage = useCallback(
+    (name: string, data: any) => {
+      const initialData = {
+        ...savedQuiz,
+        isMultipleAnswers,
+        isAbleToReturn,
+        isTimer,
+        isTimerPerQuestion,
+        timer,
+        quizName,
+        questions,
+        [name]: data,
+      };
+      save(NEW_QUIZ, initialData);
+    },
+    [
+      savedQuiz,
+      isMultipleAnswers,
+      isAbleToReturn,
+      isTimer,
+      isTimerPerQuestion,
+      timer,
+      quizName,
+      questions,
+    ],
+  );
+
+  useEffect(() => {
+    updateLocalStorage('isMultipleAnswers', isMultipleAnswers);
+  }, [isMultipleAnswers, updateLocalStorage]);
+
+  useEffect(() => {
+    updateLocalStorage('isAbleToReturn', isAbleToReturn);
+  }, [isAbleToReturn, updateLocalStorage]);
+
+  useEffect(() => {
+    updateLocalStorage('isTimer', isTimer);
+  }, [isTimer, updateLocalStorage]);
+
+  useEffect(() => {
+    updateLocalStorage('timer', timer);
+  }, [timer, updateLocalStorage]);
+
+  useEffect(() => {
+    updateLocalStorage('isTimerPerQuestion', isTimerPerQuestion);
+  }, [isTimerPerQuestion, updateLocalStorage]);
+
+  useEffect(() => {
+    updateLocalStorage('quizName', quizName);
+  }, [quizName, updateLocalStorage]);
 
   const addQuestion = () => {
     setQuestions([
